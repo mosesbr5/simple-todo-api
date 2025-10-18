@@ -1,4 +1,4 @@
-// simple in-memory data store (BUG-5: missing module.exports)
+// fixed in-memory data module
 let todos = [
   { id: 1, title: 'Belajar JS' },
   { id: 2, title: 'Buat README' }
@@ -12,9 +12,10 @@ function addTodo(todo) {
   // simulate async op
   return new Promise((resolve) => {
     setTimeout(() => {
-      const id = todos.length + 1;
-      todos.push({ id, title: todo.title });
-      resolve(todos[todos.length - 1]);
+      const id = todos.length ? todos[todos.length - 1].id + 1 : 1;
+      const newTodo = { id, title: todo.title };
+      todos.push(newTodo);
+      resolve(newTodo);
     }, 50);
   });
 }
