@@ -20,7 +20,11 @@ function addTodo(todo) {
 }
 
 function deleteTodo(id) {
-  // BUG-4: wrong deletion by using id as index instead of findIndex
-  todos.splice(id, 1);
+  // find index by id
+  const idx = todos.findIndex(t => t.id === Number(id));
+  if (idx === -1) return false;
+  todos.splice(idx, 1);
   return true;
 }
+
+module.exports = { getTodos, addTodo, deleteTodo };
