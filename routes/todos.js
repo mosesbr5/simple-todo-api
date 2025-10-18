@@ -11,13 +11,13 @@ router.get('/', (req, res) => {
   }
 });
 
-// BUG-2 & BUG-3: not awaiting addTodo and no validation
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const { title } = req.body;
-  // if title undefined, calling trim() will crash (BUG-3)
-  const trimmed = title.trim();
-  data.addTodo({ title: trimmed }); // missing await (BUG-2)
-  res.status(200).json({ message: 'created' }); // BUG-6: should be 201 and return created resource
+  if (!title || typeof title !== 'string' || !title.trim()) {
+    return res.status(400).json({ error: 'title is required' });
+  }
+  const created = await data.addTodo({ title: title.trim() });
+  res.status(201).json(created);
 });
 
 router.put('/:id', (req, res) => {
